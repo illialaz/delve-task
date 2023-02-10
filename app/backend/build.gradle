@@ -1,0 +1,42 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.8'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'illia.delve'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudGcpVersion', "3.4.3")
+	set('springCloudVersion', "2021.0.5")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.google.cloud:spring-cloud-gcp-starter'
+	implementation platform('com.google.cloud:libraries-bom:26.5.0')
+	implementation 'com.google.cloud:google-cloud-bigquery'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	runtimeOnly project(':frontend')
+}
+
+task copyWebApp(type: Copy) {
+ from "$rootDir/app/frontend/build"
+ into "$rootDir/app/backend/build/resources/main/static/."
+}
+
+bootJar.dependsOn(copyWebApp)
+compileJava.dependsOn ":frontend:build"
+
+dependencyManagement {
+	imports {
+		mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:${springCloudGcpVersion}"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}

@@ -1,0 +1,4 @@
+rootProject.name = 'delve'
+include 'frontend', 'backend'
+project(':frontend').projectDir = file('app/frontend')
+project(':backend').projectDir = file('app/backend')
