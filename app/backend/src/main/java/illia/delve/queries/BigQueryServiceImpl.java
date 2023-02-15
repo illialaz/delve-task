@@ -36,15 +36,21 @@ public class BigQueryServiceImpl implements BigQueryService {
 
     private boolean checkQueryFields(ArrayList<String> columnFields, ArrayList<String> groupByFields) {
         for (String field : columnFields) {
-
             if (StringUtils.containsWhitespace(field)) {
+                return false;
+            }
+
+            if (field.matches(".*[;,=]+.*")) {
                 return false;
             }
         }
 
         for (String field : groupByFields) {
-
             if (StringUtils.containsWhitespace(field)) {
+                return false;
+            }
+
+            if (field.matches(".*[;,=]+.*")) {
                 return false;
             }
         }
